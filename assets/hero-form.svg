@@ -1,0 +1,53 @@
+<svg width="960" height="1160" viewBox="0 0 960 1160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="40" x2="860" y2="1130" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1C262B"/>
+      <stop offset=".34" stop-color="#607A73"/>
+      <stop offset=".67" stop-color="#C8D0B7"/>
+      <stop offset="1" stop-color="#D9FF43"/>
+    </linearGradient>
+    <radialGradient id="spot" cx="0" cy="0" r="1" gradientTransform="translate(580 330) rotate(112) scale(455 450)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F3FFD0" stop-opacity=".92"/>
+      <stop offset=".43" stop-color="#C5FF35" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#06250F" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="metal" x1="228" y1="375" x2="790" y2="960" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FFF2"/>
+      <stop offset=".17" stop-color="#75887B"/>
+      <stop offset=".35" stop-color="#F7FFDC"/>
+      <stop offset=".5" stop-color="#35453D"/>
+      <stop offset=".7" stop-color="#DBFF65"/>
+      <stop offset=".88" stop-color="#5F7568"/>
+      <stop offset="1" stop-color="#F4FFDC"/>
+    </linearGradient>
+    <filter id="blur" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="44"/>
+    </filter>
+    <filter id="warp" x="-25%" y="-25%" width="150%" height="150%">
+      <feTurbulence type="fractalNoise" baseFrequency=".008 .016" numOctaves="2" seed="8" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="34" xChannelSelector="R" yChannelSelector="B"/>
+    </filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 .24"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="960" height="1160" fill="url(#bg)"/>
+  <rect width="960" height="1160" fill="url(#spot)"/>
+  <ellipse cx="454" cy="768" rx="340" ry="240" fill="#06140D" opacity=".42" filter="url(#blur)"/>
+  <g filter="url(#warp)">
+    <path d="M130 712C253 496 321 279 519 263C706 248 794 386 771 554C751 699 650 757 704 889C755 1015 579 1074 423 991C271 910 23 905 130 712Z" fill="url(#metal)" opacity=".94"/>
+    <path d="M271 642C356 514 388 372 512 363C633 354 690 438 677 545C662 657 597 690 625 778C653 865 542 892 451 844C355 794 196 791 271 642Z" fill="#10251B" opacity=".74"/>
+    <path d="M342 587C397 510 414 427 490 422C562 416 600 465 590 532C581 600 537 619 556 673C574 724 508 742 450 712C390 682 296 680 342 587Z" fill="url(#metal)" opacity=".9"/>
+  </g>
+  <g opacity=".72">
+    <circle cx="717" cy="336" r="53" fill="#D5FF58" filter="url(#blur)"/>
+    <circle cx="714" cy="334" r="24" fill="#F5FFE3"/>
+  </g>
+  <path d="M121 1035H840" stroke="#E8F1D5" stroke-opacity=".26"/>
+  <path d="M121 1055H842" stroke="#E8F1D5" stroke-opacity=".12"/>
+  <rect width="960" height="1160" filter="url(#grain)" opacity=".22"/>
+</svg>
