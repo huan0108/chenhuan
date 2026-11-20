@@ -35,7 +35,7 @@ jobs:
 
       - run: npm run lint
 
-      - run: npm run build -- --base=/chenhuan/
+      - run: npm run build -- --base=/
 
       - uses: actions/configure-pages@v5
         with:
