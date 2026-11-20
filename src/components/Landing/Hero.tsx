@@ -1,0 +1,100 @@
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { heroMediaDesktop, heroMediaMobile } from '../../content/heroMedia';
+
+export default function Hero() {
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 767px)').matches);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const heroMedia = isMobile ? heroMediaMobile : heroMediaDesktop;
+  const safeActiveIndex = activeIndex % heroMedia.length;
+  const activeMedia = heroMedia[safeActiveIndex];
+  const nextMedia = heroMedia[(safeActiveIndex + 1) % heroMedia.length];
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (heroMedia.length <= 1) return undefined;
+
+    const timer = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % heroMedia.length);
+    }, 5000);
+
+    return () => window.clearInterval(timer);
+  }, [heroMedia]);
+
+  return (
+    <section
+      id="hero"
+      className="relative min-h-screen h-[100dvh] overflow-hidden bg-black"
+    >
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeMedia.src}
+          className="absolute -inset-px"
+          initial={{ opacity: 0, scale: 1.02 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.01 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        >
+          {activeMedia.type === 'video' ? (
+            <video
+              src={activeMedia.src}
+              className="block h-full w-full object-cover"
+              preload={safeActiveIndex === 0 ? 'auto' : 'metadata'}
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
+          ) : (
+            <img
+              src={activeMedia.src}
+              alt={activeMedia.alt ?? '首页轮播图片'}
+              className="block h-full w-full object-cover"
+            />
+          )}
+        </motion.div>
+      </AnimatePresence>
+
+      {/* 移动端只预加载下一条视频，避免切换时黑屏等待。 */}
+      {isMobile && nextMedia?.type === 'video' && heroMedia.length > 1 ? (
+        <video
+          key={nextMedia.src}
+          src={nextMedia.src}
+          preload="auto"
+          muted
+          playsInline
+          aria-hidden="true"
+          className="hidden"
+        />
+      ) : null}
+
+      <div className="pointer-events-none absolute inset-0 z-[2] bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0.16)_36%,rgba(0,0,0,0.38)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 z-[3] bg-[radial-gradient(circle_at_16%_56%,rgba(0,0,0,0.22),transparent_0_34%),radial-gradient(circle_at_24%_40%,rgba(255,255,255,0.04),transparent_0_18%),radial-gradient(circle_at_36%_50%,rgba(173,255,98,0.04),transparent_0_20%)]" />
+
+      <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/18 px-3 py-2 backdrop-blur-sm">
+        {heroMedia.map((media, index) => (
+          <button
+            key={media.src}
+            type="button"
+            onClick={() => setActiveIndex(index)}
+            className={`h-2.5 rounded-full transition-all ${
+              safeActiveIndex === index ? 'w-8 bg-white' : 'w-2.5 bg-white/45 hover:bg-white/70'
+            }`}
+            aria-label={`切换到第 ${index + 1} 个轮播媒体`}
+          />
+        ))}
+      </div>
+
+    </section>
+  );
+}
